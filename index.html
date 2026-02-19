@@ -58,7 +58,7 @@
             50% { opacity: 1; }
         }
         
-        /* Effetto fumo */
+        /* Effetto fumo per sigaretta */
         .smoke-container {
             position: fixed;
             width: 100%;
@@ -69,64 +69,92 @@
             pointer-events: none;
             overflow: hidden;
         }
-        
-        .smoke {
+
+        /* Posiziona la sigaretta relativa al contenitore */
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 153, 255, 0.3);
+            padding: 80px 60px;
+            text-align: center;
+            max-width: 850px;
+            animation: slideUp 1s ease-out;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            position: relative;
+        }
+
+        .cigarette {
             position: absolute;
+            right: 30px;
+            bottom: 30px;
+            width: 110px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .cig-body {
+            background: linear-gradient(90deg, #fff 0%, #f0f0f0 60%);
+            height: 8px;
+            border-radius: 6px;
+            flex: 1 1 auto;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+        }
+
+        .cig-tip {
+            width: 18px;
+            height: 14px;
+            margin-left: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #f6b28c 0%, #d97f5a 100%);
+            box-shadow: 0 0 8px rgba(255,120,60,0.2);
+        }
+
+        /* Puff sottili e filiformi tipici del fumo di sigaretta */
+        .smoke-puff {
+            position: absolute;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
-            filter: blur(40px);
-            opacity: 0.3;
-            will-change: transform, opacity;
+            background: rgba(180, 180, 190, 0.6);
+            filter: blur(6px);
+            opacity: 0;
+            transform-origin: center bottom;
+            pointer-events: none;
         }
-        
-        @keyframes smokeFloat {
+
+        @keyframes cigSmoke {
             0% {
                 opacity: 0;
-                transform: translateY(0) translateX(0) scale(0.5);
+                transform: translateY(0) translateX(0) scale(0.6) rotate(0deg);
             }
             10% {
-                opacity: 0.4;
+                opacity: 0.6;
             }
-            50% {
-                opacity: 0.3;
+            60% {
+                opacity: 0.25;
+                transform: translateY(-140px) translateX(-12px) scale(1.2) rotate(-6deg);
             }
             100% {
                 opacity: 0;
-                transform: translateY(-100vh) translateX(100px) scale(1.5);
+                transform: translateY(-240px) translateX(18px) scale(1.6) rotate(8deg);
             }
         }
-        
-        @keyframes smokeFloat2 {
-            0% {
-                opacity: 0;
-                transform: translateY(0) translateX(0) scale(0.5);
-            }
-            10% {
-                opacity: 0.4;
-            }
-            50% {
-                opacity: 0.3;
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100vh) translateX(-100px) scale(1.5);
-            }
+
+        @keyframes cigSmoke2 {
+            0% { opacity: 0; transform: translateY(0) translateX(0) scale(0.5) rotate(0deg); }
+            15% { opacity: 0.65; }
+            60% { opacity: 0.2; transform: translateY(-120px) translateX(20px) scale(1.3) rotate(10deg); }
+            100% { opacity: 0; transform: translateY(-240px) translateX(-34px) scale(1.8) rotate(-12deg); }
         }
-        
-        @keyframes smokeFloat3 {
-            0% {
-                opacity: 0;
-                transform: translateY(0) translateX(0) scale(0.5);
-            }
-            10% {
-                opacity: 0.4;
-            }
-            50% {
-                opacity: 0.3;
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100vh) translateX(50px) scale(1.5);
-            }
+
+        @keyframes cigSmoke3 {
+            0% { opacity: 0; transform: translateY(0) translateX(0) scale(0.4) rotate(0deg); }
+            12% { opacity: 0.6; }
+            60% { opacity: 0.22; transform: translateY(-160px) translateX(6px) scale(1.4) rotate(4deg); }
+            100% { opacity: 0; transform: translateY(-260px) translateX(28px) scale(1.9) rotate(14deg); }
         }
         
         .main-content {
@@ -364,7 +392,11 @@
             </div>
             
             <div class="divider"></div>
-            
+            <div class="cigarette" id="cigarette">
+                <div class="cig-body"></div>
+                <div class="cig-tip"></div>
+            </div>
+
             <div class="content-section">
                 <h2>Ti auguro...</h2>
                 <p>Giorni pieni di felicità, successi straordinari, salute e serenità. Continua a essere la forza trainante di ogni avventura, perché con te la vita è sempre una festa.</p>

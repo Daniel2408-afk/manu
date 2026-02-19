@@ -118,11 +118,12 @@
             width: 14px;
             height: 14px;
             border-radius: 50%;
-            background: rgba(180, 180, 190, 0.6);
-            filter: blur(6px);
+            background: rgba(240, 240, 245, 0.98);
+            filter: blur(4px);
             opacity: 0;
             transform-origin: center bottom;
             pointer-events: none;
+            mix-blend-mode: screen;
         }
 
         @keyframes cigSmoke {
@@ -155,6 +156,63 @@
             12% { opacity: 0.6; }
             60% { opacity: 0.22; transform: translateY(-160px) translateX(6px) scale(1.4) rotate(4deg); }
             100% { opacity: 0; transform: translateY(-260px) translateX(28px) scale(1.9) rotate(14deg); }
+        }
+        
+        /* Smoke layers: grandi, densi, per effetto incendio */
+        .smoke-layer {
+            position: absolute;
+            will-change: transform, opacity;
+            filter: blur(12px) saturate(130%);
+            opacity: 0.38; /* più visibile */
+            pointer-events: none;
+            mix-blend-mode: screen;
+            background: radial-gradient(60% 40% at 30% 40%, rgba(255,200,170,0.28), rgba(200,120,100,0.06));
+            border-radius: 40%;
+            transform-origin: center;
+        }
+
+        @keyframes smokeDrift {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+                opacity: 0.12;
+            }
+            25% {
+                transform: translateY(-10vh) translateX(6vw) rotate(4deg) scale(1.02);
+                opacity: 0.34;
+            }
+            55% {
+                transform: translateY(-45vh) translateX(-6vw) rotate(-4deg) scale(1.08);
+                opacity: 0.28;
+            }
+            80% {
+                transform: translateY(-70vh) translateX(10vw) rotate(6deg) scale(1.12);
+                opacity: 0.18;
+            }
+            100% {
+                transform: translateY(-110vh) translateX(-8vw) rotate(-8deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+        
+        /* Ember (scintilla) sulla punta della sigaretta */
+        .cig-ember {
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ff9a2e, #ff4b2e);
+            box-shadow: 0 0 22px rgba(255,90,30,0.95), 0 0 8px rgba(255,140,60,0.6) inset;
+            animation: emberPulse 1.1s ease-in-out infinite;
+            z-index: 3;
+        }
+
+        @keyframes emberPulse {
+            0% { transform: translateY(-50%) scale(0.9); opacity: 0.9; }
+            50% { transform: translateY(-50%) scale(1.18); opacity: 1; }
+            100% { transform: translateY(-50%) scale(0.95); opacity: 0.85; }
         }
         
         .main-content {
@@ -319,13 +377,71 @@
         .footer {
             margin-top: 60px;
             padding-top: 40px;
-            border-top: 2px solid rgba(0, 102, 204, 0.2);
-            color: #666;
+            border-top: 2px solid rgba(0, 0, 0, 0.08);
+            color: #222;
             font-size: 0.95em;
+            position: relative;
+            overflow: visible;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.02) 60%, rgba(0,0,0,0.04) 100%);
+            box-shadow: 0 -10px 60px rgba(255, 90, 30, 0.08) inset;
         }
         
         .footer p {
             margin: 8px 0;
+        }
+
+        /* Flames nel footer */
+        .flames {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -8px;
+            height: 80px;
+            pointer-events: none;
+            z-index: 4;
+        }
+
+        .flame {
+            position: absolute;
+            bottom: 0;
+            width: 40px;
+            height: 60px;
+            transform-origin: bottom center;
+            animation: flameFlicker 900ms infinite ease-in-out;
+            filter: blur(2px);
+        }
+
+        .flame:before,
+        .flame:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0;
+            border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+        }
+
+        .flame:before {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 40%, #ffd66b, #ff9a2e 50%, rgba(255,120,40,0.1) 80%);
+            opacity: 0.95;
+        }
+
+        .flame:after {
+            width: 66%;
+            height: 66%;
+            bottom: 8px;
+            background: radial-gradient(circle at 50% 40%, #fff6d0, #ffd66b 40%, rgba(255,180,100,0.05) 80%);
+            opacity: 0.95;
+        }
+
+        @keyframes flameFlicker {
+            0% { transform: scaleY(0.9) translateX(0) rotate(0deg); opacity: 0.95; }
+            25% { transform: scaleY(1.08) translateX(-3px) rotate(-2deg); opacity: 1; }
+            50% { transform: scaleY(1.02) translateX(2px) rotate(1deg); opacity: 0.98; }
+            75% { transform: scaleY(1.12) translateX(-1px) rotate(-1deg); opacity: 1; }
+            100% { transform: scaleY(0.95) translateX(0) rotate(0deg); opacity: 0.9; }
         }
         
         .divider {
@@ -394,7 +510,7 @@
             <div class="divider"></div>
             <div class="cigarette" id="cigarette">
                 <div class="cig-body"></div>
-                <div class="cig-tip"></div>
+                <div class="cig-tip"><div class="cig-ember"></div></div>
             </div>
 
             <div class="content-section">
@@ -421,6 +537,54 @@
             star.style.top = Math.random() * 100 + '%';
             star.style.animationDelay = Math.random() * 3 + 's';
             starsContainer.appendChild(star);
+        }
+
+        // Genera grandi "wisps" di fumo nello sfondo
+        function createSmokeLayer(options = {}) {
+            const layer = document.createElement('div');
+            layer.className = 'smoke-layer';
+
+            const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+            const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+
+            // larghezza/altezza random per aspetto naturale
+            const width = (Math.random() * 40 + 30); // percentuale larghezza
+            const height = (Math.random() * 25 + 20); // percentuale altezza
+
+            layer.style.width = width + 'vw';
+            layer.style.height = height + 'vh';
+
+            // posizione orizzontale iniziale
+            const left = Math.random() * 100;
+            layer.style.left = (left - width * 0.1) + 'vw';
+            // parte bassa iniziale (sotto il contenuto)
+            layer.style.bottom = (-10 - Math.random() * 10) + 'vh';
+
+            // colori e opacità vari (più intensi per effetto incendio)
+            const baseOpacity = 0.18 + Math.random() * 0.28; // 0.18 - 0.46
+            layer.style.opacity = baseOpacity;
+
+            // variazione gradiente per ogni layer
+            const light = 220 + Math.floor(Math.random() * 35);
+            const r = Math.min(255, light + Math.floor(Math.random() * 10));
+            const g = Math.min(255, light + Math.floor(Math.random() * 10));
+            const b = 255;
+            layer.style.background = `radial-gradient(60% 40% at ${20 + Math.random() * 60}% ${30 + Math.random() * 40}%, rgba(${r},${g},${b},${baseOpacity * 1.2}), rgba(${r - 10},${g - 10},${b - 20},${baseOpacity * 0.05}))`;
+
+            // durata e delay random (più variabilità, alcuni veloci come fumo caldo)
+            const duration = 18 + Math.random() * 60; // 18 - 78s
+            const delay = Math.random() * -duration;
+            layer.style.animation = `smokeDrift ${duration}s linear ${delay}s infinite`;
+
+            smokeContainer.appendChild(layer);
+            return layer;
+        }
+
+        // crea più layer all'avvio
+        function initSmokeBackground(count = 12) {
+            for (let i = 0; i < count; i++) {
+                createSmokeLayer();
+            }
         }
 
         // Genera puff dal bordo della sigaretta
@@ -463,18 +627,21 @@
 
         // Emissione ciclica: piccoli sbuffi singoli e gruppi più intensi
         function startCigarette() {
-            setInterval(() => createCigPuff(), 900);
-            // occasionalmente un piccolo gruppo di puff
+            // puff più frequenti
+            setInterval(() => createCigPuff(), 600);
+            // occasionalmente un piccolo gruppo di puff (gruppi più densi)
             setInterval(() => {
-                for (let i = 0; i < 3; i++) {
-                    setTimeout(createCigPuff, i * 250);
+                for (let i = 0; i < 4; i++) {
+                    setTimeout(createCigPuff, i * 200 + Math.random() * 120);
                 }
-            }, 7000 + Math.random() * 3000);
+            }, 4500 + Math.random() * 3000);
         }
 
         // Avvia tutto dopo il caricamento
         window.addEventListener('load', () => {
             startCigarette();
+            // Inizializza i grandi wisps di fumo nello sfondo (maggiore visibilità)
+            initSmokeBackground(10);
         });
     </script>
 </body>

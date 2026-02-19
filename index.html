@@ -422,45 +422,60 @@
             star.style.animationDelay = Math.random() * 3 + 's';
             starsContainer.appendChild(star);
         }
-        
-        // Genera effetto fumo
+
+        // Genera puff dal bordo della sigaretta
         const smokeContainer = document.getElementById('smokeContainer');
-        const colors = ['rgba(100, 180, 255, 0.6)', 'rgba(150, 200, 255, 0.5)', 'rgba(200, 220, 255, 0.4)', 'rgba(100, 150, 255, 0.5)'];
-        
-        function createSmoke() {
-            const smoke = document.createElement('div');
-            smoke.className = 'smoke';
-            
-            const size = Math.random() * 150 + 50;
-            const startX = Math.random() * window.innerWidth;
-            const startY = window.innerHeight + 50;
-            const duration = Math.random() * 8 + 12;
-            const color = colors[Math.floor(Math.random() * colors.length)];
-            const animationType = Math.floor(Math.random() * 3);
-            
-            smoke.style.left = startX + 'px';
-            smoke.style.top = startY + 'px';
-            smoke.style.width = size + 'px';
-            smoke.style.height = size + 'px';
-            smoke.style.backgroundColor = color;
-            smoke.style.animation = animationType === 0 ? `smokeFloat ${duration}s ease-in infinite` : 
-                                   animationType === 1 ? `smokeFloat2 ${duration}s ease-in infinite` :
-                                   `smokeFloat3 ${duration}s ease-in infinite`;
-            smoke.style.animationDelay = Math.random() * 2 + 's';
-            
-            smokeContainer.appendChild(smoke);
-            
-            // Rimuovi l'elemento dopo l'animazione per evitare memory leak
+        const cigarette = document.getElementById('cigarette');
+
+        function createCigPuff() {
+            if (!cigarette) return;
+            const rect = cigarette.getBoundingClientRect();
+            const puff = document.createElement('div');
+            puff.className = 'smoke-puff';
+
+            // randomizza dimensione e posizione iniziale vicino al bordo della sigaretta
+            const size = Math.random() * 10 + 8; // 8 - 18px
+            puff.style.width = size + 'px';
+            puff.style.height = size + 'px';
+
+            // calcola posizione rispetto al viewport e lo posiziona nel container
+            const startX = rect.left + rect.width - 12 + (Math.random() * 8 - 4);
+            const startY = rect.top + rect.height / 2 + (Math.random() * 6 - 3);
+
+            puff.style.left = startX + 'px';
+            puff.style.top = startY + 'px';
+
+            // scelta casuale dell'animazione per variare il movimento
+            const anim = Math.floor(Math.random() * 3);
+            const duration = (Math.random() * 2.5 + 3.5).toFixed(2); // 3.5 - 6s
+            puff.style.animation = (anim === 0 ? 'cigSmoke' : (anim === 1 ? 'cigSmoke2' : 'cigSmoke3')) + ` ${duration}s linear forwards`;
+
+            // varia l'opacità iniziale leggermente
+            puff.style.opacity = 0;
+
+            smokeContainer.appendChild(puff);
+
+            // rimuovi dopo animazione
             setTimeout(() => {
-                smoke.remove();
-                createSmoke();
-            }, (duration + 2) * 1000);
+                puff.remove();
+            }, (parseFloat(duration) + 0.5) * 1000);
         }
-        
-        // Crea più particelle di fumo
-        for (let i = 0; i < 8; i++) {
-            setTimeout(() => createSmoke(), i * 1000);
+
+        // Emissione ciclica: piccoli sbuffi singoli e gruppi più intensi
+        function startCigarette() {
+            setInterval(() => createCigPuff(), 900);
+            // occasionalmente un piccolo gruppo di puff
+            setInterval(() => {
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(createCigPuff, i * 250);
+                }
+            }, 7000 + Math.random() * 3000);
         }
+
+        // Avvia tutto dopo il caricamento
+        window.addEventListener('load', () => {
+            startCigarette();
+        });
     </script>
 </body>
 </html>

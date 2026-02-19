@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Per il mio migliore amico Manu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,124 +13,311 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0066cc 0%, #0099ff 25%, #00ccff 50%, #0066cc 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Stelle animate */
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        .main-content {
+            position: relative;
+            z-index: 1;
         }
         
         .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 60px 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 153, 255, 0.3);
+            padding: 80px 60px;
             text-align: center;
-            max-width: 700px;
-            animation: slideUp 0.8s ease-out;
+            max-width: 850px;
+            animation: slideUp 1s ease-out;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
         }
         
         @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(50px);
             }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+        
+        .header {
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 8px;
+            background: linear-gradient(90deg, transparent, #0066cc, #00ccff, transparent);
+            border-radius: 20px;
         }
         
         h1 {
-            color: #667eea;
-            font-size: 3em;
-            margin-bottom: 20px;
+            color: #0066cc;
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
             animation: fadeIn 1s ease-out 0.2s both;
+            letter-spacing: -1px;
+        }
+        
+        .subtitle {
+            color: #0099ff;
+            font-size: 1.3em;
+            font-weight: 300;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease-out 0.3s both;
         }
         
         .name {
-            font-size: 2.5em;
-            color: #764ba2;
-            font-weight: bold;
-            margin-bottom: 30px;
+            font-family: 'Great Vibes', cursive;
+            font-size: 4em;
+            color: #0066cc;
+            font-weight: 400;
+            margin: 40px 0;
             animation: fadeIn 1s ease-out 0.4s both;
+            text-shadow: 2px 2px 4px rgba(0, 102, 204, 0.1);
+        }
+        
+        .emoji-main {
+            font-size: 5em;
+            margin: 30px 0;
+            animation: bounce 2.5s infinite;
+            filter: drop-shadow(0 5px 10px rgba(0, 102, 204, 0.2));
+        }
+        
+        .content-section {
+            margin: 50px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.05), rgba(0, 204, 255, 0.05));
+            border-radius: 20px;
+            border-left: 5px solid #0099ff;
+            animation: fadeIn 1.2s ease-out 0.5s both;
+        }
+        
+        .content-section h2 {
+            color: #0066cc;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            font-weight: 600;
         }
         
         p {
-            color: #555;
-            font-size: 1.2em;
-            line-height: 1.8;
-            margin-bottom: 20px;
-            animation: fadeIn 1s ease-out 0.6s both;
+            color: #333;
+            font-size: 1.1em;
+            line-height: 2;
+            margin-bottom: 15px;
         }
         
-        .emoji {
-            font-size: 4em;
-            margin: 30px 0;
-            animation: bounce 2s infinite;
+        .memories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
         }
         
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-20px);
-            }
+        .memory-card {
+            background: linear-gradient(135deg, #0066cc, #0099ff);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            animation: fadeIn 1.3s ease-out 0.6s both;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
         }
         
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        .memory-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 102, 204, 0.3);
         }
         
-        .footer {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 2px solid #eee;
-            color: #999;
-            font-size: 0.9em;
+        .memory-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .memory-card p {
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0;
         }
         
         .heart {
-            color: #ff6b6b;
+            color: #ff3b7f;
             display: inline-block;
             animation: heartbeat 1.5s infinite;
+            font-size: 1.2em;
         }
         
         @keyframes heartbeat {
-            0%, 100% {
-                transform: scale(1);
-            }
-            25% {
-                transform: scale(1.3);
-            }
-            50% {
-                transform: scale(1);
-            }
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-25px); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .footer {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 2px solid rgba(0, 102, 204, 0.2);
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .footer p {
+            margin: 8px 0;
+        }
+        
+        .divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #0099ff, transparent);
+            margin: 30px auto;
+            border-radius: 2px;
+        }
+        
+        .special-message {
+            background: linear-gradient(135deg, #fff9e6, #fffbf0);
+            border: 2px solid #ffd700;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            animation: fadeIn 1.4s ease-out 0.7s both;
+        }
+        
+        .special-message p {
+            color: #333;
+            font-style: italic;
+            font-size: 1.1em;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>✨ Una pagina speciale ✨</h1>
-        <div class="name">Per Manu</div>
-        <div class="emoji">🎉</div>
-        <p>Dedicata al mio migliore amico</p>
-        <p>Ti auguro giorni pieni di felicità, successi e momenti indimenticabili!</p>
-        <div class="heart">❤️</div>
-        <p style="margin-top: 30px; font-style: italic;">Grazie per essere il migliore amico che un chiunque possa desiderare.</p>
-        <p style="margin-top: 30px; color: #666;">Ti ringrazio per tutte le sigarette, canne, risse e furti fatti insieme. 😄 Questi sono i momenti che rendono indimenticabile un'amicizia vera.</p>
-        
-        <div class="footer">
-            <p>Made with <span class="heart">❤️</span> on GitHub Pages</p>
+    <div class="stars" id="stars"></div>
+    
+    <div class="main-content">
+        <div class="container">
+            <div class="header">
+                <h1>✨ Per il mio migliore amico ✨</h1>
+                <p class="subtitle">Una dedica speciale</p>
+            </div>
+            
+            <div class="emoji-main">🎉</div>
+            <div class="name">Manu</div>
+            <div class="divider"></div>
+            
+            <div class="content-section">
+                <h2>Chi sei per me</h2>
+                <p>Sei il migliore amico che un chiunque possa desiderare. Un vero fratello. Qualcuno con cui condividere gioie, avventure, risate e momenti indimenticabili.</p>
+            </div>
+            
+            <div class="memories">
+                <div class="memory-card">
+                    <h3>🎯 Avventure</h3>
+                    <p>Momenti pieni di azione e adrenalina</p>
+                </div>
+                <div class="memory-card">
+                    <h3>😂 Risate</h3>
+                    <p>Infiniti momenti di pura follia</p>
+                </div>
+                <div class="memory-card">
+                    <h3>🤝 Lealtà</h3>
+                    <p>Un'amicizia che non vacilla mai</p>
+                </div>
+            </div>
+            
+            <div class="special-message">
+                <p><span class="heart">❤️</span> Ti ringrazio per tutte le sigarette, canne, risse e furti fatti insieme. Questi momenti pazzi, avventurosi e ribelli sono quelli che rendono un'amicizia veramente indimenticabile e autentica. <span class="heart">❤️</span></p>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="content-section">
+                <h2>Ti auguro...</h2>
+                <p>Giorni pieni di felicità, successi straordinari, salute e serenità. Continua a essere la forza trainante di ogni avventura, perché con te la vita è sempre una festa.</p>
+            </div>
+            
+            <div class="emoji-main" style="font-size: 3em; margin: 30px 0;">🌟</div>
+            
+            <div class="footer">
+                <p style="font-size: 1.2em; color: #0066cc; font-weight: 600;">Grazie di essere tu</p>
+                <p>Made with <span class="heart">❤️</span> on GitHub Pages</p>
+            </div>
         </div>
     </div>
+    
+    <script>
+        // Genera stelle casuali
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+    </script>
 </body>
 </html>
